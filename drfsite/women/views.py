@@ -1,10 +1,33 @@
+from django.forms import model_to_dict
 from django.shortcuts import render
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Women
 from .serializers import WomenSerializer
 
 
-class WomenAPIView(generics.ListAPIView):
-    queryset = Women.objects.all()
-    serializer_class = WomenSerializer
+# class WomenAPIView(generics.ListAPIView):
+#     queryset = Women.objects.all()
+#     serializer_class = WomenSerializer
 
+
+class WomenAPIView(APIView):
+    def get(self, request):
+        # самый простой вариант гет-запроса, возвращающий статические данные
+        # return Response({'title': 'Angeline Jolie'})
+
+        lst = Women.objects.all().values()
+        return Response({'posts': list(lst)})
+
+    def post(self, request):
+        # аналогично - примитивный пост-запрос
+        # return Response({'title': 'Jennifer Shrader Lawrence'})
+
+        post_new = Women.objects.create(
+            title=request.data['title'],
+            content=request.data['content'],
+            cat_id=request.data['cat_id']
+        )
+        return Response({'post': model_to_dict(post_new)})
