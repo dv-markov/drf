@@ -15,19 +15,38 @@ from .serializers import WomenSerializer
 
 class WomenAPIView(APIView):
     def get(self, request):
-        # самый простой вариант гет-запроса, возвращающий статические данные
-        # return Response({'title': 'Angeline Jolie'})
-
-        lst = Women.objects.all().values()
-        return Response({'posts': list(lst)})
+        w = Women.objects.all()
+        # Response преобразовывает словарь в байтовую json-строку
+        return Response({'posts': WomenSerializer(w, many=True).data})
 
     def post(self, request):
-        # аналогично - примитивный пост-запрос
-        # return Response({'title': 'Jennifer Shrader Lawrence'})
+        serializer = WomenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
         post_new = Women.objects.create(
             title=request.data['title'],
             content=request.data['content'],
             cat_id=request.data['cat_id']
         )
-        return Response({'post': model_to_dict(post_new)})
+        return Response({'post': WomenSerializer(post_new).data})
+
+
+# Урок 3 - базовый класс APIView
+# class WomenAPIView(APIView):
+#     def get(self, request):
+#         # самый простой вариант гет-запроса, возвращающий статические данные
+#         # return Response({'title': 'Angeline Jolie'})
+#
+#         lst = Women.objects.all().values()
+#         return Response({'posts': list(lst)})
+#
+#     def post(self, request):
+#         # аналогично - примитивный пост-запрос
+#         # return Response({'title': 'Jennifer Shrader Lawrence'})
+#
+#         post_new = Women.objects.create(
+#             title=request.data['title'],
+#             content=request.data['content'],
+#             cat_id=request.data['cat_id']
+#         )
+#         return Response({'post': model_to_dict(post_new)})
