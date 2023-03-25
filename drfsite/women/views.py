@@ -14,8 +14,20 @@ from .serializers import WomenSerializer
 
 
 # 6 - ListAPIView
-# class WomenAPIList(generics.RetrieveUpdateDestroyAPIView):  # только для одиночных запросов
-class WomenAPIList(generics.DestroyAPIView, generics.ListCreateAPIView):
+# generics.DestroyAPIView  # для удаления записей
+class WomenAPIList(generics.ListCreateAPIView):
+    queryset = Women.objects.all()
+    serializer_class = WomenSerializer
+
+
+# 7 - UpdateAPIView и RetrieveUpdateDestroyAPIView
+class WomenAPIUpdate(generics.UpdateAPIView):
+    # базовый класс UpdateAPIView отработает queryset и возвратит клиенту только 1 запись
+    queryset = Women.objects.all()
+    serializer_class = WomenSerializer
+
+
+class WomenAPIDetailView(generics.RetrieveUpdateDestroyAPIView):  # только для одиночных запросов
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
 
@@ -25,7 +37,8 @@ class WomenAPIList(generics.DestroyAPIView, generics.ListCreateAPIView):
 #     def get(self, request):
 #         # список статей получаем как набор queryset
 #         w = Women.objects.all()
-#         # Response вызывает функцию JSON-рендерера, который преобразовывает словарь/словари data в байтовую json-строку
+#         # Response вызывает функцию JSON-рендерера,
+#         # который преобразовывает словарь/словари data в байтовую json-строку
 #         return Response({'posts': WomenSerializer(w, many=True).data})
 #
 #     def post(self, request):
@@ -69,7 +82,8 @@ class WomenAPIList(generics.DestroyAPIView, generics.ListCreateAPIView):
 #     def get(self, request):
 #         # список статей получаем как набор queryset
 #         w = Women.objects.all()
-#         # Response вызывает функцию JSON-рендерера, который преобразовывает словарь/словари data в байтовую json-строку
+#         # Response вызывает функцию JSON-рендерера,
+#         # который преобразовывает словарь/словари data в байтовую json-строку
 #         return Response({'posts': WomenSerializer(w, many=True).data})
 #
 #     def post(self, request):
