@@ -13,13 +13,16 @@ from .serializers import WomenSerializer
 #     serializer_class = WomenSerializer
 
 
+# Урок 4 - введение в сериализацию
 class WomenAPIView(APIView):
     def get(self, request):
+        # список статей получаем как набор queryset
         w = Women.objects.all()
-        # Response преобразовывает словарь в байтовую json-строку
+        # Response вызывает функцию JSON-рендерера, который преобразовывает словарь/словари data в байтовую json-строку
         return Response({'posts': WomenSerializer(w, many=True).data})
 
     def post(self, request):
+        # сериализатор распаковывает входные данные - выполняет функцию JSON-парсера и проверку входных данных
         serializer = WomenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
