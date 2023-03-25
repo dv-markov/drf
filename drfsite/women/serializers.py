@@ -1,8 +1,8 @@
 import io
 
 from rest_framework import serializers
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
+# from rest_framework.parsers import JSONParser
+# from rest_framework.renderers import JSONRenderer
 
 from .models import Women
 
@@ -13,34 +13,42 @@ from .models import Women
 #         model = Women
 #         fields = ('title', 'cat_id')
 
+# 6 - Класс ModelSerializer
+class WomenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Women
+        # вернуть пользователю все поля
+        fields = "__all__"
+        # fields = ("title", "content", "cat")  # указываем необх. поля и внешний ключ, используемый в модели
+
 # 5 Функционал работы с БД в сериализаторе
-class WomenSerializer(serializers.Serializer):
-    title = serializers.CharField(max_length=255)
-    content = serializers.CharField()
-    time_create = serializers.DateTimeField(read_only=True)
-    time_update = serializers.DateTimeField(read_only=True)
-    is_published = serializers.BooleanField(default=True)
-    cat_id = serializers.IntegerField()
-
-    # создание записи в БД
-    def create(self, validated_data):
-        return Women.objects.create(**validated_data)
-
-    # изменение данных в БД
-    # instance - модель изменяемого объекта в БД
-    # validated_data - набор полученных данных
-    def update(self, instance, validated_data):
-        instance.title = validated_data.get("title", instance.title)
-        instance.content = validated_data.get("content", instance.content)
-        instance.time_update = validated_data.get("time_update", instance.time_update)
-        instance.is_published = validated_data.get("is_published", instance.is_published)
-        instance.cat_id = validated_data.get("cat_id", instance.cat_id)
-        instance.save()
-        return instance
+# class WomenSerializer(serializers.Serializer):
+#     title = serializers.CharField(max_length=255)
+#     content = serializers.CharField()
+#     time_create = serializers.DateTimeField(read_only=True)
+#     time_update = serializers.DateTimeField(read_only=True)
+#     is_published = serializers.BooleanField(default=True)
+#     cat_id = serializers.IntegerField()
+#
+#     # создание записи в БД
+#     def create(self, validated_data):
+#         return Women.objects.create(**validated_data)
+#
+#     # изменение данных в БД
+#     # instance - модель изменяемого объекта в БД
+#     # validated_data - набор полученных данных
+#     def update(self, instance, validated_data):
+#         instance.title = validated_data.get("title", instance.title)
+#         instance.content = validated_data.get("content", instance.content)
+#         instance.time_update = validated_data.get("time_update", instance.time_update)
+#         instance.is_published = validated_data.get("is_published", instance.is_published)
+#         instance.cat_id = validated_data.get("cat_id", instance.cat_id)
+#         instance.save()
+#         return instance
 
 # # 4 - способ задания всех свойств сериализатора вручную (через Serializer)
 # базовый вариант - только для преобразования данных в формат JSON и обратно
-# по сериализоторы должны также работать с БД
+# но сериализаторы должны также работать с БД
 # class WomenSerializer(serializers.Serializer):
 #     title = serializers.CharField(max_length=255)
 #     content = serializers.CharField()

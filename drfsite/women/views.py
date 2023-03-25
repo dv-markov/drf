@@ -12,48 +12,56 @@ from .serializers import WomenSerializer
 #     queryset = Women.objects.all()
 #     serializer_class = WomenSerializer
 
+
+# 6 - ListAPIView
+# class WomenAPIList(generics.RetrieveUpdateDestroyAPIView):  # только для одиночных запросов
+class WomenAPIList(generics.DestroyAPIView, generics.ListCreateAPIView):
+    queryset = Women.objects.all()
+    serializer_class = WomenSerializer
+
+
 # 5 - Перенос работы с БД в сериализатор
-class WomenAPIView(APIView):
-    def get(self, request):
-        # список статей получаем как набор queryset
-        w = Women.objects.all()
-        # Response вызывает функцию JSON-рендерера, который преобразовывает словарь/словари data в байтовую json-строку
-        return Response({'posts': WomenSerializer(w, many=True).data})
-
-    def post(self, request):
-        serializer = WomenSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # вызывает метод create сериализатора
-
-        return Response({'post': serializer.data})
-
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method PUT is not allowed"})
-
-        try:
-            instance = Women.objects.get(pk=pk)
-        except:
-            return Response({"error": "Object does not exist"})
-
-        serializer = WomenSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()  # вызовет метод update сериализатора, т.к. указаны instance и data
-        return Response({"post": serializer.data})
-
-    def delete(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method DELETE is not allowed"})
-
-        try:
-            w = Women.objects.get(pk=pk)
-        except:
-            return Response({"error": f"Object with id {pk} does not exist"})
-
-        w.delete()
-        return Response({"post": "deleted post " + str(pk)})
+# class WomenAPIView(APIView):
+#     def get(self, request):
+#         # список статей получаем как набор queryset
+#         w = Women.objects.all()
+#         # Response вызывает функцию JSON-рендерера, который преобразовывает словарь/словари data в байтовую json-строку
+#         return Response({'posts': WomenSerializer(w, many=True).data})
+#
+#     def post(self, request):
+#         serializer = WomenSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()  # вызывает метод create сериализатора
+#
+#         return Response({'post': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method PUT is not allowed"})
+#
+#         try:
+#             instance = Women.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Object does not exist"})
+#
+#         serializer = WomenSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()  # вызовет метод update сериализатора, т.к. указаны instance и data
+#         return Response({"post": serializer.data})
+#
+#     def delete(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method DELETE is not allowed"})
+#
+#         try:
+#             w = Women.objects.get(pk=pk)
+#         except:
+#             return Response({"error": f"Object with id {pk} does not exist"})
+#
+#         w.delete()
+#         return Response({"post": "deleted post " + str(pk)})
 
 
 # # Урок 4 - введение в сериализацию
