@@ -1,8 +1,9 @@
 from django.forms import model_to_dict
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from .models import Women
 from .serializers import WomenSerializer
@@ -13,23 +14,41 @@ from .serializers import WomenSerializer
 #     serializer_class = WomenSerializer
 
 
+# 7 - ViewSets
+# ReadOnlyModelViewSet - только для чтения
+class WomenViewSet(viewsets.ModelViewSet):
+    queryset = Women.objects.all()
+    serializer_class = WomenSerializer
+
+
+# Эквивалент ModelViewSet
+# class WomenViewSet(mixins.CreateModelMixin,
+#                    mixins.RetrieveModelMixin,
+#                    mixins.UpdateModelMixin,
+#                    mixins.DestroyModelMixin,
+#                    mixins.ListModelMixin,
+#                    GenericViewSet):
+#     queryset = Women.objects.all()
+#     serializer_class = WomenSerializer
+
+
 # 6 - ListAPIView
 # generics.DestroyAPIView  # для удаления записей
-class WomenAPIList(generics.ListCreateAPIView):
-    queryset = Women.objects.all()
-    serializer_class = WomenSerializer
-
-
-# 7 - UpdateAPIView и RetrieveUpdateDestroyAPIView
-class WomenAPIUpdate(generics.UpdateAPIView):
-    # базовый класс UpdateAPIView отработает queryset и возвратит клиенту только 1 запись
-    queryset = Women.objects.all()
-    serializer_class = WomenSerializer
-
-
-class WomenAPIDetailView(generics.RetrieveUpdateDestroyAPIView):  # только для одиночных запросов
-    queryset = Women.objects.all()
-    serializer_class = WomenSerializer
+# class WomenAPIList(generics.ListCreateAPIView):
+#     queryset = Women.objects.all()
+#     serializer_class = WomenSerializer
+#
+#
+# # 7 - UpdateAPIView и RetrieveUpdateDestroyAPIView
+# class WomenAPIUpdate(generics.UpdateAPIView):
+#     # базовый класс UpdateAPIView отработает queryset и возвратит клиенту только 1 запись
+#     queryset = Women.objects.all()
+#     serializer_class = WomenSerializer
+#
+#
+# class WomenAPIDetailView(generics.RetrieveUpdateDestroyAPIView):  # только для одиночных запросов
+#     queryset = Women.objects.all()
+#     serializer_class = WomenSerializer
 
 
 # 5 - Перенос работы с БД в сериализатор
