@@ -13,17 +13,43 @@ from .models import Women
 #         model = Women
 #         fields = ('title', 'cat_id')
 
-
-# способ задания всех свойств сериализатора вручную (через Serializer)
+# 5 Функционал работы с БД в сериализаторе
 class WomenSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=255)
     content = serializers.CharField()
-    # чтобы сериализатор не требовал введения определенных полей в методе POST, их нужно задавать как readonly
     time_create = serializers.DateTimeField(read_only=True)
     time_update = serializers.DateTimeField(read_only=True)
     is_published = serializers.BooleanField(default=True)
-    # идентификатор категории в сериализаторе записывается как целое значение
     cat_id = serializers.IntegerField()
+
+    # создание записи в БД
+    def create(self, validated_data):
+        return Women.objects.create(**validated_data)
+
+    # изменение данных в БД
+    # instance - модель изменяемого объекта в БД
+    # validated_data - набор полученных данных
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get("title", instance.title)
+        instance.content = validated_data.get("content", instance.content)
+        instance.time_update = validated_data.get("time_update", instance.time_update)
+        instance.is_published = validated_data.get("is_published", instance.is_published)
+        instance.cat_id = validated_data.get("cat_id", instance.cat_id)
+        instance.save()
+        return instance
+
+# # 4 - способ задания всех свойств сериализатора вручную (через Serializer)
+# базовый вариант - только для преобразования данных в формат JSON и обратно
+# по сериализоторы должны также работать с БД
+# class WomenSerializer(serializers.Serializer):
+#     title = serializers.CharField(max_length=255)
+#     content = serializers.CharField()
+#     # чтобы сериализатор не требовал введения определенных полей в методе POST, их нужно задавать как readonly
+#     time_create = serializers.DateTimeField(read_only=True)
+#     time_update = serializers.DateTimeField(read_only=True)
+#     is_published = serializers.BooleanField(default=True)
+#     # идентификатор категории в сериализаторе записывается как целое значение
+#     cat_id = serializers.IntegerField()
 #
 #
 # # тестовый класс, локальные свойства модели и имена переменных в сериализаторе должны совпадать
