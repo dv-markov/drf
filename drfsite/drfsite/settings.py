@@ -129,5 +129,11 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',  # интерфейс для доступа через браузер
+    ],
+
+    # 10 Permissions - поведение по умолчанию
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # значение по умолчанию
+        # 'rest_framework.permissions.IsAuthenticated',
     ]
 }

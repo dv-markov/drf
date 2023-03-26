@@ -15,6 +15,9 @@ from .models import Women
 
 # 6 - Класс ModelSerializer
 class WomenSerializer(serializers.ModelSerializer):
+    # 10 Permissions, скрытие поля с текущим пользователем
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Women
         # вернуть пользователю все поля
