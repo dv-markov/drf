@@ -29,7 +29,7 @@ class WomenAPIUpdate(generics.RetrieveUpdateAPIView):
     serializer_class = WomenSerializer
     # permission_classes = (IsOwnerOrReadOnly, )
     permission_classes = (IsAuthenticated, )
-    # authentication_classes = (TokenAuthentication, )  # Аутентификация только по токенам
+    # authentication_classes = (TokenAuthentication, )  # Аутентификация только по обычным токенам
 
 
 class WomenAPIDestroy(generics.RetrieveDestroyAPIView):

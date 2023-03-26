@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from women.views import *
 from rest_framework import routers
@@ -49,6 +50,11 @@ urlpatterns = [
     # 12 Djoser
     path('api/v1/auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
+
+    # 13 JWT
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # 9 Маршруты для ViewSet через роутер
     # http://127.0.0.1:8000/api/v1/women/, # http://127.0.0.1:8000/api/v1/women/<pk>
