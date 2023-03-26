@@ -146,6 +146,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',  # аутентификация по сессиям включена по умолчанию
         'rest_framework.authentication.SessionAuthentication',  # аутентификация по сессиям включена по умолчанию
     ],
+
+    # 15 Pagination
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2,
 }
 
 
