@@ -37,6 +37,9 @@ from women.routers import MyCustomRouter
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # 11 Auth
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
+
     # 10 Permissions
     path('api/v1/women/', WomenAPIList.as_view()),
     path('api/v1/women/<int:pk>/', WomenAPIUpdate.as_view()),
