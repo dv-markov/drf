@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'women.apps.WomenConfig',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -135,5 +137,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',  # значение по умолчанию
         # 'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+
+    # 12 Djoser auth
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',  # аутентификация по сессиям включена по умолчанию
+        'rest_framework.authentication.SessionAuthentication',  # аутентификация по сессиям включена по умолчанию
+    ],
 }

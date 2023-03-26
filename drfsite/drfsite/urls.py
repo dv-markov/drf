@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from women.views import *
 from rest_framework import routers
@@ -26,6 +26,7 @@ from women.routers import MyCustomRouter
 # router.register(r'women', WomenViewSet)
 
 # # роутер формирует список маршрутов и связывает их с определенным ViewSet
+# # в отличие от SimpleRouter, DefaultRouter имеет адрес общего api, со ссылками на остальные
 # # router = routers.DefaultRouter()
 # router = MyCustomRouter()
 # # префикс (basename) имени маршрута формируется из имени модели в queryset
@@ -44,6 +45,10 @@ urlpatterns = [
     path('api/v1/women/', WomenAPIList.as_view()),
     path('api/v1/women/<int:pk>/', WomenAPIUpdate.as_view()),
     path('api/v1/womendelete/<int:pk>/', WomenAPIDestroy.as_view()),
+
+    # 12 Djoser
+    path('api/v1/auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 
     # 9 Маршруты для ViewSet через роутер
     # http://127.0.0.1:8000/api/v1/women/, # http://127.0.0.1:8000/api/v1/women/<pk>
